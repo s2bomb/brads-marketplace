@@ -1,0 +1,21 @@
+{
+  "name": "python-quality-hooks",
+  "description": "Automated code quality checks for Python files. Runs ruff, basedpyright, and bandit on file edits.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Brad (s2bomb)",
+    "email": "bkerryk@gmail.com"
+  },
+  "keywords": [
+    "python",
+    "quality",
+    "linting",
+    "ruff",
+    "basedpyright",
+    "bandit",
+    "hooks"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/s2bomb/brads-marketplace",
+  "repository": "https://github.com/s2bomb/brads-marketplace"
+}

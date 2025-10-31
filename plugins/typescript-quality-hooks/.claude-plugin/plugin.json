@@ -1,19 +1,19 @@
 {
-  "name": "code-quality-hooks",
-  "description": "Automated code quality checks for Python and TypeScript/JavaScript files. Runs linters, formatters, and type checkers on file edits.",
+  "name": "typescript-quality-hooks",
+  "description": "Automated code quality checks for TypeScript and JavaScript files. Runs Prettier, ESLint, and TypeScript type checking on file edits.",
   "version": "1.0.0",
   "author": {
     "name": "Brad (s2bomb)",
     "email": "bkerryk@gmail.com"
   },
   "keywords": [
+    "typescript",
+    "javascript",
     "quality",
     "linting",
-    "python",
-    "typescript",
-    "ruff",
-    "eslint",
     "prettier",
+    "eslint",
+    "tsc",
     "hooks"
   ],
   "license": "MIT",

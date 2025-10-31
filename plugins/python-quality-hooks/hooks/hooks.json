@@ -1,0 +1,14 @@
+{
+  "PostToolUse": [
+    {
+      "matcher": "Edit|Write",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "${CLAUDE_PLUGIN_ROOT}/hooks/python-quality-check.py",
+          "timeout": 30
+        }
+      ]
+    }
+  ]
+}

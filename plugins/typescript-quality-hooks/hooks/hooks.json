@@ -5,11 +5,6 @@
       "hooks": [
         {
           "type": "command",
-          "command": "${CLAUDE_PLUGIN_ROOT}/hooks/python-quality-check.py",
-          "timeout": 30
-        },
-        {
-          "type": "command",
           "command": "${CLAUDE_PLUGIN_ROOT}/hooks/typescript-quality-check.py",
           "timeout": 30
         }

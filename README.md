@@ -12,8 +12,14 @@ A collection of Claude Code plugins for code quality and developer productivity.
 
 ### 2. Install plugins
 
+Install one or both quality check plugins:
+
 ```bash
-/plugin install code-quality-hooks@brads-marketplace
+# For Python projects
+/plugin install python-quality-hooks@brads-marketplace
+
+# For TypeScript/JavaScript projects
+/plugin install typescript-quality-hooks@brads-marketplace
 ```
 
 ### 3. Restart Claude Code
@@ -22,21 +28,31 @@ After installation, restart Claude Code to activate the plugins.
 
 ## Available Plugins
 
-### code-quality-hooks
+### python-quality-hooks
 
-Automated code quality checks for Python and TypeScript/JavaScript files.
+Automated code quality checks for Python files.
 
 **Features:**
-- Python: ruff, basedpyright, bandit
-- TypeScript/JS: prettier, eslint, tsc
-- Auto-fixes issues when possible
-- Only reports what needs manual fixing
+- **ruff** - Fast linter with auto-fix
+- **basedpyright** - Type checker
+- **bandit** - Security scanner
 
-[View plugin details](./plugins/code-quality-hooks/README.md)
+[View plugin details](./plugins/python-quality-hooks/README.md)
+
+### typescript-quality-hooks
+
+Automated code quality checks for TypeScript/JavaScript files.
+
+**Features:**
+- **Prettier** - Code formatter with auto-fix
+- **ESLint** - Linter with auto-fix
+- **TypeScript** - Type checker
+
+[View plugin details](./plugins/typescript-quality-hooks/README.md)
 
 ## Usage
 
-Once installed, plugins run automatically. For code-quality-hooks, quality checks trigger when you edit or write files.
+Once installed, plugins run automatically when you edit or write files. Each plugin only checks its specific file types (.py for Python, .ts/.tsx/.js/.jsx for TypeScript).
 
 ## Contributing
 
