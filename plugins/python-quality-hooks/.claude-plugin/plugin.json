@@ -1,7 +1,7 @@
 {
   "name": "python-quality-hooks",
   "description": "Automated code quality checks for Python files. Runs ruff, basedpyright, and bandit on file edits.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "Brad (s2bomb)",
     "email": "bkerryk@gmail.com"

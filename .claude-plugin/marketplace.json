@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "Brad's collection of Claude Code plugins for code quality and developer productivity",
-    "version": "1.0.0"
+    "version": "1.0.1"
   },
   "plugins": [
     {
       "name": "python-quality-hooks",
       "source": "./plugins/python-quality-hooks",
       "description": "Automated code quality checks for Python files. Runs ruff, basedpyright, and bandit.",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "author": {
         "name": "Brad (s2bomb)"
       },
@@ -24,7 +24,7 @@
       "name": "typescript-quality-hooks",
       "source": "./plugins/typescript-quality-hooks",
       "description": "Automated code quality checks for TypeScript/JavaScript files. Runs Prettier, ESLint, and TypeScript.",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "author": {
         "name": "Brad (s2bomb)"
       },
