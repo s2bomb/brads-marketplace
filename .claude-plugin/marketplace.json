@@ -1,0 +1,24 @@
+{
+  "name": "brads-marketplace",
+  "owner": {
+    "name": "Brad (s2bomb)",
+    "email": "bkerryk@gmail.com"
+  },
+  "metadata": {
+    "description": "Brad's collection of Claude Code plugins for code quality and developer productivity",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "code-quality-hooks",
+      "source": "./plugins/code-quality-hooks",
+      "description": "Automated code quality checks for Python and TypeScript/JavaScript files",
+      "version": "1.0.0",
+      "author": {
+        "name": "Brad (s2bomb)"
+      },
+      "keywords": ["quality", "linting", "python", "typescript", "hooks"],
+      "category": "productivity"
+    }
+  ]
+}
