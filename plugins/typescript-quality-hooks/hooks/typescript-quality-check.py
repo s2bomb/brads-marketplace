@@ -136,13 +136,6 @@ def parse_eslint_output(output: str) -> str | None:
     if total == 0:
         return None
 
-    # Extract filename from first non-empty line
-    filename = None
-    for line in output.split("\n"):
-        if line.strip() and not line.startswith(" "):
-            filename = line.strip().split("/")[-1]
-            break
-
     # Parse each issue line
     # Format:   line:col  level  message  rule-name
     issue_pattern = r"^\s+(\d+):(\d+)\s+(warning|error)\s+(.+?)\s+([\w@/-]+)\s*$"
@@ -168,23 +161,13 @@ def parse_eslint_output(output: str) -> str | None:
     # Format Level 2 output
     result_lines = []
 
-    # Header with filename if available
-    if filename:
-        if errors > 0 and warnings > 0:
-            result_lines.append(
-                f"ESLint: {errors} error(s), {warnings} warning(s) in {filename}"
-            )
-        elif errors > 0:
-            result_lines.append(f"ESLint: {errors} error(s) in {filename}")
-        else:
-            result_lines.append(f"ESLint: {warnings} warning(s) in {filename}")
+    # Header (filename already shown in parent context message)
+    if errors > 0 and warnings > 0:
+        result_lines.append(f"ESLint: {errors} error(s), {warnings} warning(s)")
+    elif errors > 0:
+        result_lines.append(f"ESLint: {errors} error(s)")
     else:
-        if errors > 0 and warnings > 0:
-            result_lines.append(f"ESLint: {errors} error(s), {warnings} warning(s)")
-        elif errors > 0:
-            result_lines.append(f"ESLint: {errors} error(s)")
-        else:
-            result_lines.append(f"ESLint: {warnings} warning(s)")
+        result_lines.append(f"ESLint: {warnings} warning(s)")
 
     # Group issues by rule
     for rule, lines in sorted(issues_by_rule.items(), key=lambda x: -len(x[1])):
@@ -209,11 +192,11 @@ def check_eslint(file_path: str, project_root: Path) -> str | None:
     return parse_eslint_output(output)
 
 
-def parse_typescript_output(output: str, exit_code: int) -> str | None:
+def parse_typescript_output(output: str, exit_code: int, edited_file: str) -> str | None:
     """
-    Parse TypeScript output and return Level 1 formatted message.
+    Parse TypeScript output and return Level 2 formatted message.
 
-    Level 1 (Full): Shows every error with complete details
+    Level 2 (Grouped): Only show errors in edited file, grouped by error pattern
     """
     # Exit 0 or empty output = clean
     if exit_code == 0 or not output or not output.strip():
@@ -224,63 +207,64 @@ def parse_typescript_output(output: str, exit_code: int) -> str | None:
     error_pattern = r"^(.+)\((\d+),(\d+)\): error (TS\d+): (.+)$"
 
     errors = []
-    filename = None
+    edited_filename = Path(edited_file).name
 
     for line in output.split("\n"):
         match = re.match(error_pattern, line.strip())
         if match:
             filepath = match.group(1).strip()
             line_num = match.group(2)
-            col_num = match.group(3)
             error_code = match.group(4)
             error_msg = match.group(5).strip()
 
-            # Extract just filename from path
-            if not filename:
-                filename = filepath.split("/")[-1]
+            filename = filepath.split("/")[-1]
 
-            errors.append({
-                "filename": filepath.split("/")[-1],
-                "line": line_num,
-                "col": col_num,
-                "code": error_code,
-                "message": error_msg,
-            })
+            # Only include errors from the edited file
+            if filename == edited_filename:
+                errors.append({
+                    "line": line_num,
+                    "code": error_code,
+                    "message": error_msg,
+                })
 
     if not errors:
         return None
 
-    # Format Level 1 output
+    # Group errors by code + message pattern
+    errors_by_pattern = defaultdict(list)
+    for error in errors:
+        # Create a key combining error code and message
+        # This groups identical errors together
+        key = f"{error['code']}: {error['message']}"
+        errors_by_pattern[key].append(error['line'])
+
+    # Format Level 2 output
     result_lines = []
 
-    # Header with count and filename
+    # Header with count (filename already shown in parent context message)
     error_count = len(errors)
-    if filename:
-        result_lines.append(f"TypeScript: {error_count} error(s) in {filename}")
-    else:
-        result_lines.append(f"TypeScript: {error_count} error(s)")
+    result_lines.append(f"TypeScript: {error_count} error(s)")
 
-    # List each error with full details
-    for error in errors:
-        result_lines.append(
-            f"  - {error['filename']}({error['line']},{error['col']}): "
-            f"{error['code']}: {error['message']}"
-        )
+    # Group and display by pattern (sorted by count descending)
+    for pattern, lines in sorted(errors_by_pattern.items(), key=lambda x: -len(x[1])):
+        count = len(lines)
+        lines_str = ", ".join(lines)
+        result_lines.append(f"  - {pattern} ({count}× at lines {lines_str})")
 
     return "\n".join(result_lines)
 
 
 def check_typescript(file_path: str, project_root: Path) -> str | None:
-    """Run tsc --noEmit. Returns Level 1 formatted output."""
+    """Run tsc --noEmit --skipLibCheck. Returns Level 2 formatted output."""
     rel_path = Path(file_path).relative_to(project_root)
 
     output, exit_code = run_command(
-        ["npx", "tsc", "--noEmit", str(rel_path)],
+        ["npx", "tsc", "--noEmit", "--skipLibCheck", str(rel_path)],
         cwd=str(project_root),
     )
 
-    # Use Level 1 parser
-    return parse_typescript_output(output, exit_code)
+    # Use Level 2 parser
+    return parse_typescript_output(output, exit_code, file_path)
 
 
 def main() -> None:

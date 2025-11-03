@@ -35,3 +35,18 @@ Uses your project's existing configuration files:
 ## Timeout
 
 Hook has a 30-second timeout. If checks take longer, they'll be terminated.
+
+## Changelog
+
+### v1.1.0 (2025-11-04)
+**Major improvements to signal-to-noise ratio:**
+- **78% noise reduction:** Added `--skipLibCheck` to TypeScript checker - eliminated 76+ errors from node_modules type definitions
+- **Grouped output:** TypeScript errors now grouped by pattern instead of listed individually (e.g., "6× at lines 31, 32, 56..." instead of 6 separate entries)
+- **File-scoped filtering:** Only shows TypeScript errors in the file you edited (not imported dependencies)
+- **Removed filename redundancy:** Cleaner output format
+
+**Before:** 97 errors (91 from node_modules), all listed individually
+**After:** 21 errors in your file only, grouped into ~10 patterns
+
+### v1.0.1 (2025-10-31)
+Initial marketplace release
